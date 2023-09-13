@@ -2,18 +2,13 @@ const express = require('express');
 const viewController = require('../controllers/viewController');
 const viewAuthController = require('../controllers/viewAuthController');
 const authController = require('../controllers/authController');
-const bookingController = require('../controllers/bookingController');
+// const bookingController = require('../controllers/bookingController');
 
 const router = express.Router();
 
-// router.use(viewAuthController.isLoggedIn);
+router.use(viewController.alerts);
 
-router.get(
-  '/',
-  bookingController.createBookingCheckout,
-  viewAuthController.isLoggedIn,
-  viewController.getOverview
-);
+router.get('/', viewAuthController.isLoggedIn, viewController.getOverview);
 router.get(
   '/tour/:slug',
   viewAuthController.isLoggedIn,
@@ -21,7 +16,12 @@ router.get(
 );
 router.get('/login', viewAuthController.isLoggedIn, viewController.loginForm);
 router.get('/me', authController.protect, viewController.getAccount);
-router.get('/my-tours', authController.protect, viewController.getMyTours);
+router.get(
+  '/my-tours',
+  // bookingController.createBookingCheckout,
+  authController.protect,
+  viewController.getMyTours
+);
 
 router.post(
   '/submit-user-data',

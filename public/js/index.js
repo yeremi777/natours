@@ -6,6 +6,7 @@ import { logout } from './logout';
 import { updateData, updatePassword } from './updateSettings';
 import { displayPhoto } from './displayPhoto';
 import { bookTour } from './stripe';
+import { showAlert } from './alert';
 
 // DOM ELEMENTS
 const leaflet = document.getElementById('map');
@@ -81,3 +82,6 @@ if (bookBtn) {
     bookTour(tourId);
   });
 }
+
+const alertMessage = document.querySelector('body').dataset.alert;
+if (alertMessage) showAlert('success', alertMessage, 10);
