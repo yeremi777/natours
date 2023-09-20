@@ -13,6 +13,7 @@ router
   .post(
     authController.restrictTo('user'),
     reviewController.setTourUserIds,
+    reviewController.checkIfBooked,
     reviewController.createReview
   );
 
@@ -21,10 +22,12 @@ router
   .get(reviewController.getReview)
   .patch(
     authController.restrictTo('user', 'admin'),
+    reviewController.checkUserReview,
     reviewController.updateReview
   )
   .delete(
     authController.restrictTo('user', 'admin'),
+    reviewController.checkUserReview,
     reviewController.deleteReview
   );
 
