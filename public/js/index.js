@@ -1,6 +1,7 @@
 /* eslint-disable */
 import '@babel/polyfill';
 import { displayMap } from './leaflet';
+import { signUp } from './signup';
 import { login } from './login';
 import { logout } from './logout';
 import { updateData, updatePassword } from './updateSettings';
@@ -10,8 +11,9 @@ import { showAlert } from './alert';
 
 // DOM ELEMENTS
 const leaflet = document.getElementById('map');
+const signUpForm = document.querySelector('.form--signUp');
 const loginForm = document.querySelector('.form--login');
-const logOutBtn = document.querySelector('.nav__el--logout');
+const logoutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
 const userImg = document.querySelector('.form__user-photo');
@@ -26,6 +28,28 @@ if (leaflet) {
   displayMap(locations);
 }
 
+if (signUpForm) {
+  signUpForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    document.querySelector('.btn--signUp').textContent = 'Processing...';
+    document.querySelector('.btn--signUp').setAttribute('disabled', true);
+    document.querySelector('.btn--signUp').cursor = 'not-allowed';
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirmation = document.getElementById(
+      'passwordConfirmation'
+    ).value;
+
+    await signUp(name, email, password, passwordConfirmation);
+
+    document.querySelector('.btn--signUp').textContent = 'Sign up';
+    document.querySelector('.btn--signUp').removeAttribute('disabled');
+    document.querySelector('.btn--signUp').removeAttribute('style');
+  });
+}
+
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -35,7 +59,7 @@ if (loginForm) {
   });
 }
 
-if (logOutBtn) logOutBtn.addEventListener('click', logout);
+if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
 if (userDataForm) {
   displayPhoto(userImg, userImgInput);

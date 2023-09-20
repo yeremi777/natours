@@ -54,6 +54,12 @@ exports.loginForm = (req, res) => {
   });
 };
 
+exports.signUpForm = (req, res) => {
+  res.status(200).render('signup', {
+    title: 'Sign Up',
+  });
+};
+
 exports.getAccount = (req, res) => {
   // if (!res.locals.user) {
   //   return res.status(401).render('error', {
