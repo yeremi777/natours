@@ -5,6 +5,13 @@ const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactoryController');
 
+exports.nestedReviews = (req, res, next) => {
+  if (req.params.tourId) req.query.tour = req.params.tourId;
+  if (req.params.userId) req.query.user = req.params.userId;
+
+  next();
+};
+
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1. Get the currently booked tour
   const tour = await Tour.findById(req.params.tourId);
