@@ -19,6 +19,7 @@ const userPasswordForm = document.querySelector('.form-user-password');
 const userImg = document.querySelector('.form__user-photo');
 const userImgInput = document.querySelector('#photo');
 const bookBtn = document.getElementById('book-tour');
+const selectedBookDate = document.querySelector('.selectStartDate');
 
 // DELEGATION
 if (leaflet) {
@@ -106,7 +107,8 @@ if (bookBtn) {
     e.target.style.cursor = 'not-allowed';
 
     const { tourId } = e.target.dataset;
-    await bookTour(tourId);
+    const startDateId = selectedBookDate.value;
+    await bookTour(tourId, startDateId);
 
     e.target.textContent = 'Book tour now!';
     e.target.removeAttribute('disabled');

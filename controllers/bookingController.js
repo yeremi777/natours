@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
@@ -16,6 +17,7 @@ exports.nestedReviews = (req, res, next) => {
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1. Get the currently booked tour
   const tour = await Tour.findById(req.params.tourId);
+  const { startDateId } = req.params;
 
   // 2. Check if the tour has been booked before
   const bookedTour = await Booking.findOne({
@@ -50,6 +52,9 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
         quantity: 1,
       },
     ],
+    metadata: {
+      tour_date_id: startDateId,
+    },
     mode: 'payment',
   });
 
@@ -75,8 +80,19 @@ const createBookingCheckout = async (session) => {
   const tour = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.amount_total / 100;
+  const date = session.metadata.tour_date_id;
 
-  await Booking.create({ tour, user, price });
+  const connection = await mongoose.connection.startSession();
+  try {
+    connection.startTransaction();
+    await Booking.create({ tour, user, price, date });
+    await connection.commitTransaction();
+  } catch (err) {
+    console.log(err.message);
+    console.log('Transaction has been canceled.');
+    await connection.abortTransaction();
+  }
+  connection.endSession();
 };
 
 exports.webhookCheckout = (req, res, next) => {
