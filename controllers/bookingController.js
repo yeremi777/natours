@@ -2,8 +2,9 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
-const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactoryController');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
 exports.nestedReviews = (req, res, next) => {
   if (req.params.tourId) req.query.tour = req.params.tourId;
@@ -16,7 +17,17 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1. Get the currently booked tour
   const tour = await Tour.findById(req.params.tourId);
 
-  // 2. Create checkout session
+  // 2. Check if the tour has been booked before
+  const bookedTour = await Booking.findOne({
+    user: req.user.id,
+    tour: req.params.tourId,
+  });
+
+  if (bookedTour) {
+    return next(new AppError(`This tour has already been booked before!`, 401));
+  }
+
+  // 3. Create checkout session
   const session = await stripe.checkout.sessions.create({
     // success_url: `${req.protocol}://${req.get('host')}/my-tours/?tour=${
     //   req.params.tourId
@@ -42,7 +53,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     mode: 'payment',
   });
 
-  // 3. Create session as response
+  // 4. Create session as response
   res.status(200).json({
     status: 'success',
     session,

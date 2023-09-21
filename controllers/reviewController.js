@@ -30,7 +30,7 @@ exports.checkIfBooked = catchAsync(async (req, res, next) => {
   });
 
   if (!bookedTour) {
-    return next(new AppError('You not booked this tour!', 403));
+    return next(new AppError('You not booked this tour!', 401));
   }
 
   next();

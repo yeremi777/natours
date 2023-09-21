@@ -100,10 +100,17 @@ if (userPasswordForm) {
 }
 
 if (bookBtn) {
-  bookBtn.addEventListener('click', (e) => {
+  bookBtn.addEventListener('click', async (e) => {
     e.target.textContent = 'Processing...';
+    e.target.setAttribute('disabled', true);
+    e.target.style.cursor = 'not-allowed';
+
     const { tourId } = e.target.dataset;
-    bookTour(tourId);
+    await bookTour(tourId);
+
+    e.target.textContent = 'Book tour now!';
+    e.target.removeAttribute('disabled');
+    e.target.removeAttribute('style');
   });
 }
 
