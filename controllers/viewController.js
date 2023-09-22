@@ -52,11 +52,27 @@ exports.getTour = catchAsync(async (req, res, next) => {
 
   const isFull = allSoldOut(tour.startDates);
 
-  // 2. Build template
-  // 3. Render template using data from step 1
+  // 2. Check if tour has been booked and has a review (used when user already login)
+  const booking = await Booking.findOne({
+    user: res.locals.user.id,
+    tour: tour.id,
+  });
+  const booked = !!booking;
+  let commentExist;
+
+  if (res.locals.user) {
+    commentExist = tour.reviews.some(
+      (review) => review.user.id === res.locals.user.id
+    );
+  }
+
+  // 3. Build template
+  // 4. Render template using data from step 1
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,
     tour,
+    booked,
+    commentExist,
     isFull,
   });
 });

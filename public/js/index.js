@@ -8,6 +8,7 @@ import { updateData, updatePassword } from './updateSettings';
 import { displayPhoto } from './displayPhoto';
 import { bookTour } from './stripe';
 import { showAlert } from './alert';
+import { leaveReview } from './leaveReview';
 
 // DOM ELEMENTS
 const leaflet = document.getElementById('map');
@@ -20,6 +21,7 @@ const userImg = document.querySelector('.form__user-photo');
 const userImgInput = document.querySelector('#photo');
 const bookBtn = document.getElementById('book-tour');
 const selectedBookDate = document.querySelector('.selectStartDate');
+const leaveReviewForm = document.querySelector('.form-leave-review');
 
 // DELEGATION
 if (leaflet) {
@@ -127,4 +129,15 @@ if (alertMessage) {
   window.setTimeout(() => {
     location.assign(newUrl.toString());
   }, 10500);
+}
+
+if (leaveReviewForm) {
+  leaveReviewForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const review = document.getElementById('review').value;
+    const rating = document.getElementById('rating').value;
+    const tourId = leaveReviewForm.dataset.tourId;
+
+    leaveReview(review, rating, tourId);
+  });
 }
