@@ -83,6 +83,10 @@ const tourSchema = new mongoose.Schema(
           type: Number,
           default: 0,
         },
+        soldOut: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     secretTour: {

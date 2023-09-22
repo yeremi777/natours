@@ -64,6 +64,7 @@ bookingSchema.pre('save', async function (next) {
   }
 
   startDate.participants += 1;
+  if (startDate.participants >= tour.maxGroupSize) startDate.soldOut = true;
   await tour.save();
   next();
 });

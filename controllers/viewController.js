@@ -4,6 +4,17 @@ const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
+const allSoldOut = (startDates) => {
+  const result = startDates.every((item) => {
+    if (item.soldOut === true) {
+      return true;
+    }
+    return false;
+  });
+
+  return result;
+};
+
 exports.alerts = (req, res, next) => {
   const { alert } = req.query;
 
@@ -39,12 +50,14 @@ exports.getTour = catchAsync(async (req, res, next) => {
     return next(new AppError('There is no tour with that name.', 404));
   }
 
+  const isFull = allSoldOut(tour.startDates);
+
   // 2. Build template
   // 3. Render template using data from step 1
-
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,
     tour,
+    isFull,
   });
 });
 

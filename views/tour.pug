@@ -87,11 +87,13 @@ block content
         p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
         
         if user
-          button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
-
-          select.selectStartDate
-            each tourDate in tour.startDates
-              - if (tour.maxGroupSize > tourDate.participants)
-                option(value=`${tourDate._id}`)= `${tourDate.date.toLocaleString('en-us', {day: 'numeric', month: 'long', year: 'numeric'})}` 
+          if !isFull
+            button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+            select.selectStartDate
+              each tourDate in tour.startDates
+                - if (tour.maxGroupSize > tourDate.participants)
+                  option(value=`${tourDate._id}`)= `${tourDate.date.toLocaleString('en-us', {day: 'numeric', month: 'long', year: 'numeric'})}`
+          else
+            button.btn.btn--green.span-all-rows(disabled='disabled', style={cursor: 'not-allowed'}) Fully booked!
         else
           a.btn.btn--green.span-all-rows(href='/login') Log in to book tour
