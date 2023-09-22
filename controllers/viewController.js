@@ -54,8 +54,8 @@ exports.getTour = catchAsync(async (req, res, next) => {
 
   // 2. Check if tour has been booked and has a review (used when user already login)
   const booking = await Booking.findOne({
-    user: res.locals.user.id,
-    tour: tour.id,
+    user: res.locals.user,
+    tour: tour,
   });
   const booked = !!booking;
   let commentExist;
