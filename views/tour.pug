@@ -78,26 +78,28 @@ block content
 
   if user
     if (user.role !== 'admin')
-      section.section-cta
-        .cta.ma-bt-lg
-          .cta__img.cta__img--logo
-            img(src='/img/logo-white.png', alt='Natours logo')
-          img.cta__img.cta__img--1(src=`/img/tours/${tour.images[1]}`, alt='Tour picture')
-          img.cta__img.cta__img--2(src=`/img/tours/${tour.images[2]}`, alt='Tour picture')
-          .cta__content
-            h2.heading-secondary What are you waiting for?
-            p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
-                                
-            if !isFull
-              button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
-              select.selectStartDate
-                each tourDate in tour.startDates
-                  - if (tour.maxGroupSize > tourDate.participants)
-                    option(value=`${tourDate._id}`)= `${tourDate.date.toLocaleString('en-us', {day: 'numeric', month: 'long', year: 'numeric'})}`
-            else
-              button.btn.btn--green.span-all-rows(disabled='disabled', style={cursor: 'not-allowed'}) Fully booked!
+      if (!booked)
+        section.section-cta
+          .cta.ma-bt-lg
+            .cta__img.cta__img--logo
+              img(src='/img/logo-white.png', alt='Natours logo')
+            img.cta__img.cta__img--1(src=`/img/tours/${tour.images[1]}`, alt='Tour picture')
+            img.cta__img.cta__img--2(src=`/img/tours/${tour.images[2]}`, alt='Tour picture')
+            .cta__content
+              h2.heading-secondary What are you waiting for?
+              p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
+                                  
+              if !isFull
+                button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+                select.selectStartDate
+                  each tourDate in tour.startDates
+                    - if (tour.maxGroupSize > tourDate.participants)
+                      option(value=`${tourDate._id}`)= `${tourDate.date.toLocaleString('en-us', {day: 'numeric', month: 'long', year: 'numeric'})}`
+              else
+                button.btn.btn--green.span-all-rows(disabled='disabled', style={cursor: 'not-allowed'}) Fully booked!
 
-        if (booked && !commentExist)
+      if (booked && !commentExist)
+        section.section-cta
           include _leaveReview
   else
     section.section-cta
