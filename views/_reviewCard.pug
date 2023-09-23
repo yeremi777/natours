@@ -10,3 +10,8 @@ mixin reviewCard(review)
       each star in [1, 2, 3, 4, 5]
         svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
           use(xlink:href='/img/icons.svg#icon-star')
+    - if(user)
+      - if(review.user.id === user.id)
+          .reviews__change(style={'margin-top': '2rem'})
+            button.review__change.review__edit#review__edit(data-review-id=`${review.id}`) Edit
+            button.review__change.review__delete#review__delete(data-review-id=`${review.id}`) Delete
