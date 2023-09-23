@@ -98,9 +98,8 @@ block content
               else
                 button.btn.btn--green.span-all-rows(disabled='disabled', style={cursor: 'not-allowed'}) Fully booked!
 
-      if (booked && !commentExist)
-        section.section-cta
-          include _leaveReview
+      if (booked && !commentExist)        
+        include _leaveReview
   else
     section.section-cta
       .cta.ma-bt-lg

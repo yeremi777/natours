@@ -27,11 +27,12 @@ router.get(
   authController.protect,
   viewController.getMyTours
 );
+router.get('/my-reviews', authController.protect, viewController.getMyReviews);
 
-router.post(
-  '/submit-user-data',
-  authController.protect,
-  viewController.updateUserData
-);
+// router.post(
+//   '/submit-user-data',
+//   authController.protect,
+//   viewController.updateUserData
+// );
 
 module.exports = router;

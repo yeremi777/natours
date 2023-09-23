@@ -1,5 +1,6 @@
 const Tour = require('../models/tourModel');
-const User = require('../models/userModel');
+const Review = require('../models/reviewModel');
+// const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -116,18 +117,32 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateUserData = catchAsync(async (req, res, next) => {
-  const updatedUser = await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      name: req.body.name,
-      email: req.body.email,
-    },
-    { new: true, runValidators: true }
-  );
+exports.getMyReviews = catchAsync(async (req, res, next) => {
+  // Find all reviews
+  const reviews = await Review.find({ user: req.user.id }).populate({
+    path: 'tour',
+    select: 'name slug',
+  });
 
-  res.status(200).render('account', {
-    title: 'Your account',
-    user: updatedUser,
+  res.status(200).render('reviews', {
+    title: 'My Reviews',
+    reviews,
   });
 });
+
+// exports.updateUserData = catchAsync(async (req, res, next) => {
+//   // Update user data with html form submit (not api)
+//   const updatedUser = await User.findByIdAndUpdate(
+//     req.user.id,
+//     {
+//       name: req.body.name,
+//       email: req.body.email,
+//     },
+//     { new: true, runValidators: true }
+//   );
+
+//   res.status(200).render('account', {
+//     title: 'Your account',
+//     user: updatedUser,
+//   });
+// });
