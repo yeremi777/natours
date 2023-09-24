@@ -65,16 +65,16 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   });
 });
 
-// exports.createBookingCheckout = catchAsync(async (req, res, next) => {
-//   // This is only temporary, because it's UNSECURE: everyone can make bookings without paying
-//   const { tour, user, price } = req.query;
+// This is only temporary, because it's UNSECURE: everyone can make bookings without paying
+exports.createBookingCheckout = catchAsync(async (req, res, next) => {
+  const { tour, user, price } = req.query;
 
-//   if (!tour && !user && !price) return next();
+  if (!tour && !user && !price) return next();
 
-//   await Booking.create({ tour, user, price });
+  await Booking.create({ tour, user, price });
 
-//   res.redirect(req.originalUrl.split('?')[0]);
-// });
+  res.redirect(req.originalUrl.split('?')[0]);
+});
 
 const createBookingCheckout = async (session) => {
   const tour = session.client_reference_id;
@@ -95,10 +95,9 @@ const createBookingCheckout = async (session) => {
   connection.endSession();
 };
 
+// This require the stripe CLI to run in a local environment
 exports.webhookCheckout = (req, res, next) => {
-  // This require the stripe CLI to run in a local environment
   const sig = req.headers['stripe-signature'];
-
   let event;
 
   try {

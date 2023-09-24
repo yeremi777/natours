@@ -130,8 +130,8 @@ exports.getMyReviews = catchAsync(async (req, res, next) => {
   });
 });
 
+// Update user data with html form submit (not api)
 // exports.updateUserData = catchAsync(async (req, res, next) => {
-//   // Update user data with html form submit (not api)
 //   const updatedUser = await User.findByIdAndUpdate(
 //     req.user.id,
 //     {

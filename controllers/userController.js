@@ -23,7 +23,6 @@ const filterObj = (obj, ...allowedFields) => {
 //     cb(null, 'public/img/users');
 //   },
 //   filename: (req, file, cb) => {
-//     // const ext = file.mimetype.split('/')[1];
 //     const ext = mime.extension(file.mimetype);
 //     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
 //   },
@@ -62,6 +61,7 @@ exports.uploadUserPhoto = upload.single('photo');
 exports.resizeUserPhoto = async (req, res, next) => {
   if (!req.file) return next();
 
+  // const ext = req.file.mimetype.split('/')[1];
   const ext = mime.extension(req.file.mimetype);
   req.file.filename = `user-${req.user.id}-${Date.now()}.${ext}`;
 

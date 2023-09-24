@@ -14,16 +14,16 @@ exports.nestedReviews = (req, res, next) => {
   next();
 };
 
+// Allow nested routes
 exports.setTourUserIds = (req, res, next) => {
-  // Allow nested routes
   if (!req.body.tour) req.body.tour = req.params.tourId;
   req.body.user = req.user.id;
 
   next();
 };
 
+// Used when create a review
 exports.checkIfBooked = catchAsync(async (req, res, next) => {
-  // Used when create a review
   const bookedTour = await Booking.findOne({
     user: req.body.user,
     tour: req.body.tour,
@@ -36,8 +36,8 @@ exports.checkIfBooked = catchAsync(async (req, res, next) => {
   next();
 });
 
+// Used when update or delete a review
 exports.checkUserReview = catchAsync(async (req, res, next) => {
-  // Used when update or delete a review
   const review = await Review.findById(req.params.id);
 
   if (req.user.role !== 'admin' && review.user.id !== req.user.id) {
